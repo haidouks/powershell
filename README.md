@@ -1,2 +1,2 @@
 # powershell
-Powershell scripts will be stored here
+Cansin's Powershell scripts will be stored here
