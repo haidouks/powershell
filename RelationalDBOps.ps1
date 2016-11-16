@@ -1,4 +1,4 @@
-function select-sqlOracle
+function select-Oracle
 {
     [CmdletBinding()]
     Param(
@@ -30,4 +30,36 @@ function select-sqlOracle
         $con.Close()
         $con.Dispose()
     }
+}
+
+function select-MySql
+{
+    [CmdletBinding()]
+    Param(
+    [Parameter(Position=0,Mandatory=$true)]
+    [string]$connStr,
+    [Parameter(Position=1,Mandatory=$true)]
+    [string]$query)
+    $ConnectionString = $connStr
+Try {
+  [void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
+  $Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
+  $Connection.ConnectionString = $ConnectionString
+  $Connection.Open()
+  $Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
+  $DataAdapter = New-Object MySql.Data.MySqlClient.MySqlDataAdapter($Command)
+  $DataSet = New-Object System.Data.DataSet
+  $RecordCount = $dataAdapter.Fill($dataSet, "data")
+  $DataSet.Tables[0]
+  }
+Catch {
+    $ExceptionMessage = "Error in Line: " + $_.Exception.Line + ". " + $_.Exception.GetType().FullName + ": " + $_.Exception.Message + " Stacktrace: " + $_.Exception.StackTrace + " Query:"+$query
+    write-Error $ExceptionMessage
+ }
+Finally {
+  $Connection.Close()
+  $Connection.Dispose()
+  $DataSet.Dispose()
+  $DataAdapter.Dispose()
+  }
 }
