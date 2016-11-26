@@ -23,4 +23,4 @@ foreach -Parallel -throttlelimit $threads ($url in $urls)
 
 $urlList =  @("www.webservicex.net","www.powershelldunyasi.com","asdlkjasdlkj","www.twitter.com","www.hurriyet.com.tr","www.google.com","www.powershell.com","www.linkedin.com","www.facebook.com","stackoverflow.com","www.bing.com","www.onlinemedikalmarket.com") 
 
-HttpCodeCheck-Parallelism -delay 4 -urls-threads 4
+HttpCodeCheck-Parallelism -delay 4 -urls $urlList -threads 4
