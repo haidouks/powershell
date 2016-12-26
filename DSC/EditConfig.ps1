@@ -83,3 +83,7 @@ Configuration changeConfig
    }
    }
 }
+#Example Usage
+#[void]::(changeConfig -NodePath "nlog>targets>target" -path "C:\Users\caldanmaz\Downloads\NLog.config" -attributeName "Address" -newValue "Maliali" -verbose)
+#Start-DscConfiguration .\changeConfig -Wait -Force -ComputerName localhost -verbose
+
