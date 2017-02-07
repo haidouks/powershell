@@ -95,6 +95,10 @@ function checkHttpCode($url,[switch]$verbose)
 
 function stop-ApplicationPool($AppPool,$maxWait=180)
 {
+    write-verbose -Message "importing webadministration PSSnapin" -Verbose
+    Add-PSSnapin WebAdministration -ErrorAction SilentlyContinue
+    write-verbose -Message "importing webadministration Module" -Verbose
+    Import-Module WebAdministration -ErrorAction SilentlyContinue
     write-verbose -message "Stopping Application Pool($AppPool)" -Verbose
     write-verbose -message "Setting maxWait:$maxWait seconds" -Verbose
     Stop-WebAppPool -Name $AppPool -Verbose -ErrorAction SilentlyContinue
