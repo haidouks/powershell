@@ -4,7 +4,7 @@ pipeline {
     stage('Get Codes') {
       steps {
         sh 'echo deneme'
-        archiveArtifacts '*'
+        archiveArtifacts '**'
       }
     }
     stage('Copy Artifacts') {
