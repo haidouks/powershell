@@ -61,7 +61,7 @@ function highChart_SplitLines($title,$subtitle,$categories,$series,$metric,$tool
 
 
 
-
+write-host "Creating sample data"
 $categories = ("Jan","Feb","Mar") | ConvertTo-Json
 $data1 = (2,15,5)
 $data2 = (3,7,6)
