@@ -58,8 +58,6 @@ function highChart_SplitLines($title,$subtitle,$categories,$series,$metric,$tool
     $html|out-file -FilePath $outputPath -Encoding utf8 -Force
 }
 
-
-
 write-host "Creating sample datas"
 $categories = ("Jan","Feb","Mar") | ConvertTo-Json
 $data1 = (2,15,5)
