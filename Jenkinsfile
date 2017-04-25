@@ -11,5 +11,10 @@ pipeline {
         echo 'testing scripts, keep calm!!'
       }
     }
+    stage('Deploy To Dev') {
+      steps {
+        echo 'Deploying the files to Dev Environment'
+      }
+    }
   }
 }
