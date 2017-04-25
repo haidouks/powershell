@@ -19,6 +19,7 @@ Param(
 )
     Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Reset request received for user :`n$userEmail" -verbose:$info
     $userId = Get-ADUser -Filter {Emailaddress -eq $userEmail} | Select-Object -ExpandProperty SamAccountName
+    
     Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Parsed user id from Email :`n$userId" -verbose:$info
     Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Starting to create random password" -verbose:$info
     Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Received password($password), secure conversion is on fly" -verbose:$info
