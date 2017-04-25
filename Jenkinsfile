@@ -6,5 +6,10 @@ pipeline {
         archiveArtifacts(allowEmptyArchive: true, artifacts: '**')
       }
     }
+    stage('Test') {
+      steps {
+        echo 'testing scripts, keep calm!!'
+      }
+    }
   }
 }
