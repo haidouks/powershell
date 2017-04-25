@@ -1,4 +1,3 @@
-
 function highChart_SplitLines($title,$subtitle,$categories,$series,$metric,$toolTip,$outputPath)
 {
     $html = @"
