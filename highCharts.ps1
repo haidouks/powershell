@@ -67,7 +67,7 @@ name = 'istanbul'
 data = $data1
 } 
 $serie2 = @{
-name = 'canakkale'
+name = 'canakkalem'
 data = $data2
 }
 $series = New-Object System.Collections.ArrayList
