@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Copy Artifacts') {
       steps {
-        build 'Copy Artifacts'
+        build 'Copy_Artifacts'
       }
     }
     stage('Post Deployment Operations') {
