@@ -74,5 +74,4 @@ $series = New-Object System.Collections.ArrayList
 $series.Add($serie1)
 $series.Add($serie2)
 
-write-verbose -Message "Creating graphs"
 highChart_SplitLines -title "Deneme - Title" -subtitle "Denem - subtitle" -categories $categories -series ($series|ConvertTo-Json) -metric "Temperature (°C)" -toolTip "°C" -outputPath C:\temp\asd.html
