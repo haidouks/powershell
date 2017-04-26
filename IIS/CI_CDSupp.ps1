@@ -115,7 +115,7 @@ function stop-ApplicationPool($AppPool,$maxWait=180)
     }
     else
     {
-        write-verbose -message "Succesfully Stopped Application Pool($AppPool)" -Verbose
+        write-verbose -message "Succesfully Stopped Application Pool($AppPool) !" -Verbose
     }
 }
 
