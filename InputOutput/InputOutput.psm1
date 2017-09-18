@@ -47,6 +47,7 @@ function Get-FileEncoding {
 			}
 		return $result	
 }
+
 function Update-ContentOfFile {
 	<#
   .SYNOPSIS
@@ -135,6 +136,7 @@ function Update-ContentOfFile {
 			throw $Error
 		}
 	}
+
 function Search-BigFiles {
     <#
   .SYNOPSIS
@@ -222,6 +224,7 @@ function Search-BigFiles {
 	Write-Verbose -Message "Search completed in $(($t2-$t1).TotalSeconds) seconds."
 	return $Results
 }
+
 function Find-Handle {
 	<#
   .SYNOPSIS
@@ -275,7 +278,7 @@ Param(
 							ProcessID   = $Proc.Id
 							File = $p
 						}
-						$object = New-Object -TypeName PSObject –Prop $Result
+						$object = New-Object –TypeName PSObject –Prop $Result
 						[Void]$Results.Add($object)
 					}
 				}
@@ -283,13 +286,14 @@ Param(
 			}
 			else
 			{
+				
 				$_.Modules | foreach{
 					$Result = @{
 							ProcessName = $Proc.Name
 							ProcessID   = $Proc.Id
 							File = $_.FileName
 						}
-					$object = New-Object -TypeName PSObject -Prop $Result
+					$object = New-Object -TypeName PSObject –Prop $Result
 					[Void]$Results.Add($object)
 					}
 			}
@@ -305,6 +309,7 @@ Param(
 	}
 	return $Results
 }
+
 function Remove-Handle {
 		<#
   .SYNOPSIS

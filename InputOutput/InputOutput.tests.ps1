@@ -19,6 +19,7 @@ Describe "Search-BigFiles" {
 	Context "If file is there" {
 
 		$folder = "$ModulePath\Tests"
+		Write-Verbose -Message "Folder : $folder" -Verbose
 		$keyword = 'CnSn','Me'
 		$result = Get-ChildItem -Path $folder -File|ForEach-Object{Search-BigFiles $_.FullName -Keywords $keyword -Highlight}
 		$lineNumber = $result.LineNumber
@@ -39,17 +40,4 @@ Describe "Search-BigFiles" {
 		}
 	}
 }
-Describe "Handle specific tests"{
-	Context "Find-Handle function tests"{
-		It "There should be more than 100 handles on the operating system" {
-			(Find-Handle).Count | Should BeGreaterThan 10
-		}
-		It "There should be some handles for svchost process" {
-			(Find-Handle -Process svchost).Count | Should BeGreaterThan 0
-		}
-		It "There should be no handle for test file" {
-			$file = "$ModulePath\Tests\UTF8.txt"
-			(Find-Handle -Path $file).Count | Should Be 0
-		}
-	}
-}
+
