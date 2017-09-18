@@ -1,10 +1,10 @@
 function highChart_SplitLines($title,$subtitle,$categories,$series,$metric,$toolTip,$outputPath)
 {
-    $html = @"
+$html = @"
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="C:\temp\jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type='text/javascript'>//<![CDATA[
 `$(function () {
     Highcharts.chart('container', {
@@ -45,7 +45,6 @@ function highChart_SplitLines($title,$subtitle,$categories,$series,$metric,$tool
     });
 });
 //]]> 
-
 </script>
 </head>
 <body>
