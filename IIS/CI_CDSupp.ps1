@@ -18,7 +18,7 @@ function Wait-WebSite
           ValueFromPipelineByPropertyName=$True,
           HelpMessage='Maximum waiting time for no request')]
     [ValidateRange(0,600)]
-    [Int]$maxSec = 30         
+    [Int]$TimeOut = 30         
   )
   DynamicParam
   {          
@@ -48,7 +48,7 @@ function Wait-WebSite
   {
         $siteName = $PSBoundParameters[$ParamName]
         $secCounter = 0
-        Write-Verbose "Waiting for no current connection, max wait time:$maxSec seconds"
+        Write-Verbose "Waiting for no current connection, max wait time:$TimeOut seconds"
         $con = 1
         do
         {
@@ -57,14 +57,14 @@ function Wait-WebSite
             $con=(Get-Website | Get-WebRequest| Where-Object {$_.hostName -eq $siteName}).Count
             Write-Verbose "$secCounter.sec connection count:$con"
             Start-Sleep -Seconds 1
-        } while(($secCounter -le $maxSec) -and ($con -ne 0))
+        } while(($secCounter -le $TimeOut) -and ($con -ne 0))
         if($con -eq $null)
         {
             Write-Verbose "There is no requests in $secCounter seconds"
         }
-        if($secCounter -ge $maxSec)
+        if($secCounter -ge $TimeOut)
         {
-            Write-Warning -Message "Maximum waiting time($maxSec seconds) reached but $siteName still has requests!"
+            Write-Warning -Message "Maximum waiting time($TimeOut seconds) reached but $siteName still has requests!"
         }
     }       
 }
@@ -88,7 +88,7 @@ function Stop-AppPool
           ValueFromPipelineByPropertyName=$True,
           HelpMessage='Maximum waiting time for no request')]
     [ValidateRange(0,600)]
-    [Int]$maxSec = 30,
+    [Int]$TimeOut = 30,
     [Parameter(Mandatory=$False,
           ValueFromPipeline=$True,
           ValueFromPipelineByPropertyName=$True,
@@ -123,13 +123,13 @@ function Stop-AppPool
     {
         $AppPoolName = $PSBoundParameters[$ParamName]
         write-verbose -message "Stopping application pool($AppPoolName)"
-        write-verbose -message "Setting time out:$maxSec seconds"
+        write-verbose -message "Setting time out:$TimeOut seconds"
         Stop-WebAppPool -Name $AppPoolName -ErrorAction SilentlyContinue
-        while((Get-WebAppPoolState -Name $AppPoolName).Value -ne "Stopped" -and $maxSec -ge 0)
+        while((Get-WebAppPoolState -Name $AppPoolName).Value -ne "Stopped" -and $TimeOut -ge 0)
         {
             Start-sleep -Seconds 1
-            write-verbose -message "Waiting for Application Pool($AppPoolName) to be stopped. Remaining seconds: $maxSec , Current state: $((Get-WebAppPoolState -Name $AppPoolName).Value)"
-            $maxSec -= 1
+            write-verbose -message "Waiting for Application Pool($AppPoolName) to be stopped. Remaining seconds: $TimeOut , Current state: $((Get-WebAppPoolState -Name $AppPoolName).Value)"
+            $TimeOut -= 1
         }
         if((Get-WebAppPoolState -Name $AppPoolName).Value -ne "Stopped")
         {
@@ -142,7 +142,7 @@ function Stop-AppPool
             }
             if((Get-WebAppPoolState -Name $AppPoolName).Value -ne "Stopped")
             {
-                Write-Error "Couldn't stop application pool($AppPoolName) in $maxSec"
+                Write-Error "Couldn't stop application pool($AppPoolName) in $TimeOut"
             }
             else
             {
@@ -157,47 +157,44 @@ function Stop-AppPool
     }
 }
 
-function checkHttpCode($url,[switch]$verbose,$timeOut=60)
+function Get-HttpCode
 {
-    $start = Get-Date
-    $result = $false
+    <#
+  .SYNOPSIS
+  Gets the Http code for the url
+  .DESCRIPTION
+  Gets the http code for the url. In case of not receiving a http code from remote, this function waits for a max duration specified.
+  .EXAMPLE
+  Get-HttpCode -url "www.powershelldunyasi.com" -maxSec 45 
+  .PARAMETER url
+  Please specify the url to test.
+  .PARAMETER maxSec
+  Please specify the max waiting duration in seconds in case of not receiving any http code from remote.
+  #>
+    [CmdletBinding()]
+    Param (
+    [Parameter(Mandatory=$False,
+          ValueFromPipeline=$True,
+          ValueFromPipelineByPropertyName=$True,
+          HelpMessage='Maximum waiting time for no request')]
+    [ValidateRange(0,600)]
+    [Int]$TimeOut = 5,
+    [Parameter(Mandatory=$True,
+          ValueFromPipeline=$True,
+          ValueFromPipelineByPropertyName=$True,
+          HelpMessage="Please enter the url starting with 'http:\\' you want to test")]
+    #[ValidateNotNullOrEmpty]
+    [ValidatePattern('https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)')]
+    [string]$url = $false        
+  )
     try
     {
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Creating request to $url" -verbose:$verbose
-        $HTTP_Request = [System.Net.WebRequest]::Create($url)
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Setting timeout to $timeOut seconds" -verbose:$verbose
-        $HTTP_Request.Timeout = $timeOut
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Request created to $url" -verbose:$verbose
-        $HTTP_Response = $HTTP_Request.GetResponse()
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Getting response from $url" -verbose:$verbose
-        $HTTP_Status = [int]$HTTP_Response.StatusCode
-    If ($HTTP_Status -eq 200) 
-    { 
-        $result = $true 
+        return (Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec $TimeOut -DisableKeepAlive)
     }
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - HTTP code is $HTTP_Status" -verbose:$verbose
-            
-    }
-    catch 
+    catch [Net.WebException]
     {
-        $result = $false
+        return $_.Exception.Response
     }
-    finally
-    {
-        if($HTTP_Response -ne $null)
-        {
-            $HTTP_Response.Close()
-        }
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Closed connection to $url" -verbose:$verbose
-        $finish = Get-Date
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Request completed in $(($finish-$start).TotalMilliseconds) ms." -verbose:$verbose
-        
-    }
-    if($result -ne $true)
-    {
-        Write-Warning -Message "Http status code is not 200 for url:$url!" -Verbose:$true
-    }
-    return $result
 }
 
 function Get-IISWebRoot($siteName)
@@ -221,47 +218,4 @@ function Get-IISWebRoot($siteName)
             Exit 1
         }
         return $webRoot 
-}
-
-function checkHttpCode($url,[switch]$verbose)
-{
-    $start = Get-Date
-    $result = $false
-    try
-    {
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Creating request to $url" -verbose:$verbose
-        $HTTP_Request = [System.Net.WebRequest]::Create($url)
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Setting timeout to 60 seconds" -verbose:$verbose
-        $HTTP_Request.Timeout = 60000
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Request created to $url" -verbose:$verbose
-        $HTTP_Response = $HTTP_Request.GetResponse()
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Getting response from $url" -verbose:$verbose
-        $HTTP_Status = [int]$HTTP_Response.StatusCode
-    If ($HTTP_Status -eq 200) 
-    { 
-        $result = $true 
-    }
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - HTTP code is $HTTP_Status" -verbose:$verbose
-            
-    }
-    catch 
-    {
-        $result = $false
-    }
-    finally
-    {
-        if($HTTP_Response -ne $null)
-        {
-            $HTTP_Response.Close()
-        }
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Closed connection to $url" -verbose:$verbose
-        $finish = Get-Date
-        Write-Verbose "$(get-date -Format "dd/MM/yyyy HH:mm") - Function:$($MyInvocation.MyCommand) - Request completed in $(($finish-$start).TotalMilliseconds) ms." -verbose:$verbose
-        
-    }
-    if($result -ne $true)
-    {
-        Write-Warning -Message "Http status code is not 200 for url:$url!" -Verbose:$true
-    }
-    return $result
 }
