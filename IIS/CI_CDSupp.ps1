@@ -197,25 +197,64 @@ function Get-HttpCode
     }
 }
 
-function Get-IISWebRoot($siteName)
+function Get-IISWebRoot
 {
-        write-verbose -Message "importing webadministration PSSnapin" -Verbose
-        Add-PSSnapin WebAdministration -ErrorAction SilentlyContinue
-        write-verbose -Message "importing webadministration Module" -Verbose
-        Import-Module WebAdministration -ErrorAction SilentlyContinue
-        Write-Verbose "Getting physicalPath for website $siteName" -Verbose:$verbose
-        $webRoot = $null
-        Try{
-            $webRoot = (Get-Website  | where-object{$_.Name -eq $siteName}).physicalPath
+        <#
+  .SYNOPSIS
+  Gets the Http code for the url
+  .DESCRIPTION
+  Gets the http code for the url. In case of not receiving a http code from remote, this function waits for a max duration specified.
+  .EXAMPLE
+  Get-HttpCode -url "www.powershelldunyasi.com" -maxSec 45 
+  .PARAMETER url
+  Please specify the url to test.
+  .PARAMETER maxSec
+  Please specify the max waiting duration in seconds in case of not receiving any http code from remote.
+  #>
+        [CmdletBinding()]
+        Param()
+        DynamicParam
+        {          
+        $ParamName = "siteName" 
+        $ParamAttrib  = New-Object System.Management.Automation.ParameterAttribute
+        $ParamAttrib.Mandatory  = $true
+        $ParamAttrib.HelpMessage = "Please select one of the websites on the IIS server $($env:COMPUTERNAME)"
+        #$ParamAttrib.ParameterSetName = '__AllParameterSets'
+          
+        $AttribColl = New-Object  System.Collections.ObjectModel.Collection[System.Attribute]
+        $AttribColl.Add($ParamAttrib)
+
+        Import-Module -Name WebAdministration -ErrorAction Stop
+        $webSiteNames  = Get-Website -ErrorAction Stop| Select-Object -ExpandProperty Name
+        $AttribColl.Add((New-Object  System.Management.Automation.ValidateSetAttribute($webSiteNames)))
+
+        $RuntimeParam  = New-Object System.Management.Automation.RuntimeDefinedParameter($ParamName,  [string], $AttribColl)
+        $RuntimeParamDic  = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        $RuntimeParamDic.Add($ParamName,  $RuntimeParam)
+        return  $RuntimeParamDic
+        }
+        Begin{
+            $ErrorActionPreference = "Stop"
+        }
+        Process{
+            $siteName = $PSBoundParameters[$ParamName]
+            Write-Verbose "Getting physicalPath for website $siteName"
+            $webRoot = $null
+            Try
+            {
+                $webRoot = (Get-Website  | where-object{$_.Name -eq $siteName}).physicalPath
             
-        } Catch [System.IO.FileNotFoundException]{
-            Start-sleep -seconds 1
-            $webRoot = (Get-Website  | where-object{$_.Name -eq $siteName}).physicalPath
+            } 
+            Catch [System.IO.FileNotFoundException]
+            {
+                Start-sleep -seconds 1
+                $webRoot = (Get-Website  | where-object{$_.Name -eq $siteName}).physicalPath
+            }
+            if([String]::IsNullOrEmpty($webRoot))
+            {
+                Write-Host "Error:WebRoot is null"
+                Exit 1
+            }
+            return $webRoot 
         }
-        if([String]::IsNullOrEmpty($webRoot))
-        {
-            Write-Host "Error:WebRoot is null"
-            Exit 1
-        }
-        return $webRoot 
 }
