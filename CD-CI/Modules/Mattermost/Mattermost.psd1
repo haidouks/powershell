@@ -12,7 +12,7 @@
 RootModule = 'Mattermost'
 
 # Version number of this module.
-ModuleVersion = '1.0.0'
+ModuleVersion = '1.0.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) 2017 . All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'This module contains methods for Mattermost operations.'
+Description = 'This module contains methods for Mattermost API operations. Please visit https://api.mattermost.com for API documentation.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Initialization'
+        ReleaseNotes = 'Added more examples'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''

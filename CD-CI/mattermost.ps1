@@ -111,6 +111,14 @@ function Get-MMProperties
        This function gets properties from MatterMost(Ex:teams). For getting a property, first you need to create a token on MattrerMost.
        .EXAMPLE
        New-MMPost -url "http://matterdns:8065/api/v4" -MatterToken $token -MMProperty "teams"
+       .EXAMPLE
+       New-MMPost -url "http://matterdns:8065/api/v4" -MatterToken $token -MMProperty "teams/{team_id}"
+       .EXAMPLE
+       New-MMPost -url "http://matterdns:8065/api/v4" -MatterToken $token -MMProperty "users"
+       .EXAMPLE
+       New-MMPost -url "http://matterdns:8065/api/v4" -MatterToken $token -MMProperty "users/{user_id}"
+       .EXAMPLE
+       New-MMPost -url "http://matterdns:8065/api/v4" -MatterToken $token -MMProperty "channels/{channel_id}/members"
        .PARAMETER url
        Specify the post url of MatterMost API
        .PARAMETER MatterToken
