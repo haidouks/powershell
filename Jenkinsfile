@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Code Quality Tests') {
           steps {
-            powershell(encoding: 'UTF8', script: 'pwd', returnStdout: true)
+            powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStdout: true)
           }
         }
       }
@@ -37,8 +37,10 @@ pipeline {
     }
   }
   post {
-        always {
-            junit 'InputOutput/Tests/TestsResults.xml'
-        }
+    always {
+      junit 'InputOutput/Tests/TestsResults.xml'
+      
     }
+    
+  }
 }
