@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Code Quality Tests') {
           steps {
-            powershell(encoding: 'UTF8', script: 'write-output "Deneme"', returnStdout: true)
+            powershell(encoding: 'UTF8', script: 'pwd', returnStdout: true)
           }
         }
       }
