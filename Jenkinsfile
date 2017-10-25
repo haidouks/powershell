@@ -7,8 +7,7 @@ pipeline {
       }
     }
     parallel {
-    stage('Code Quality Tests') {
-        stage('Unit Tests') {		
+      stage('Unit Tests') {		
           steps {		
             echo 'Test Codes'		
           }		
