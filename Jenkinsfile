@@ -19,7 +19,6 @@ pipeline {
           }
         }
     }
-    }
     stage('Copy Artifacts') {
       steps {
         echo 'Copy_Artifacts'
