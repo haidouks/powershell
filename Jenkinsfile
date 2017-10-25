@@ -6,6 +6,7 @@ pipeline {
         archiveArtifacts '**'
       }
     }
+    stage('Tests') {
     parallel {
       stage('Unit Tests') {		
           steps {		
@@ -18,6 +19,7 @@ pipeline {
             junit 'InputOutput/Tests/TestsResults.xml'
           }
         }
+      }
     }
     stage('Copy Artifacts') {
       steps {
