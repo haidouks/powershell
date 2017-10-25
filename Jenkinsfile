@@ -6,9 +6,18 @@ pipeline {
         archiveArtifacts '**'
       }
     }
-    stage('Unit Tests') {
-      steps {
-        echo 'Test Codes'
+    stage('Tests') {
+      parallel {
+        stage('Unit Tests') {
+          steps {
+            echo 'Test Codes'
+          }
+        }
+        stage('Code Quality Tests') {
+          steps {
+            powershell(encoding: 'UTF8', script: 'write-output "Deneme"', returnStdout: true)
+          }
+        }
       }
     }
     stage('Copy Artifacts') {
