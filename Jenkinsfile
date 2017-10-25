@@ -6,14 +6,20 @@ pipeline {
         archiveArtifacts '**'
       }
     }
-    stage('Test') {
-      stage('Code Quality Tests') {
+    parallel {
+    stage('Code Quality Tests') {
+        stage('Unit Tests') {		
+          steps {		
+            echo 'Test Codes'		
+          }		
+        }		
+        stage('Code Quality Tests') {
           steps {
             powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStdout: true)
             junit 'InputOutput/Tests/TestsResults.xml'
           }
         }
-      
+    }
     }
     stage('Copy Artifacts') {
       steps {
