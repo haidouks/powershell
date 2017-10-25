@@ -1,4 +1,4 @@
-$verbosepreference = "Continue"
+$verbosepreference = "SilentlyContinue"
 if ($PSVersionTable.PSVersion.Major -ge 5)
 {
     Write-Verbose "Installing PSScriptAnalyzer & Pester"
