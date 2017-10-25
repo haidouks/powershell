@@ -6,7 +6,7 @@ pipeline {
         archiveArtifacts '**'
       }
     }
-    stage('Tests') {
+    stage('Test') {
       parallel {
         stage('Unit Tests') {
           steps {
