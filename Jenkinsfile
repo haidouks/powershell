@@ -7,19 +7,13 @@ pipeline {
       }
     }
     stage('Test') {
-      parallel {
-        stage('Unit Tests') {
-          steps {
-            echo 'Test Codes'
-          }
-        }
-        stage('Code Quality Tests') {
+      stage('Code Quality Tests') {
           steps {
             powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStdout: true)
             junit 'InputOutput/Tests/TestsResults.xml'
           }
         }
-      }
+      
     }
     stage('Copy Artifacts') {
       steps {
@@ -36,12 +30,5 @@ pipeline {
         echo 'Deployment Result'
       }
     }
-  }
-  post {
-    always {
-      junit 'InputOutput/Tests/TestsResults.xml'
-      
-    }
-    
   }
 }
