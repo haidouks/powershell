@@ -3,8 +3,8 @@ if ($PSVersionTable.PSVersion.Major -ge 5)
 {
     Write-Verbose "Installing PSScriptAnalyzer & Pester"
     $AnalyzerModuleNames = "PSScriptAnalyzer","Pester"
-    #Install-PackageProvider -Name NuGet -Force 
-    #Install-Module -Name $AnalyzerModuleNames -Scope CurrentUser -Force 
+    Install-PackageProvider -Name NuGet -Force 
+    Install-Module -Name $AnalyzerModuleNames -Scope CurrentUser -Force 
     $PSScriptAnalyzerModule = get-module -Name $AnalyzerModuleNames -ListAvailable
     if ($PSScriptAnalyzerModule) {
         # Import the module if it is available
