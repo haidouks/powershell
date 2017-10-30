@@ -15,7 +15,7 @@ pipeline {
         }		
         stage('Code Quality Tests') {
           steps {
-            powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStdout: true)
+            powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStatus: true)
             junit 'InputOutput/Tests/TestsResults.xml'
           }
         }
