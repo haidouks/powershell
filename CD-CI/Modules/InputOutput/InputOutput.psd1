@@ -12,7 +12,7 @@
 RootModule = 'InputOutput'
 
 # Version number of this module.
-ModuleVersion = '1.3.4'
+ModuleVersion = '1.4.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Handle remove function added.'
+        ReleaseNotes = 'Bug in Handle functions fixed'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
