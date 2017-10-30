@@ -7,15 +7,17 @@ pipeline {
       }
     }
     stage('Tests') {
-      parallel {
-        stage('Unit Tests') {
-          steps {
-            echo 'Test Codes'
-          }
-        }
+    parallel {
+      stage('Unit Tests') {		
+          steps {		
+            echo 'Test Codes'		
+          }		
+        }		
         stage('Code Quality Tests') {
           steps {
-            powershell(encoding: 'UTF8', script: 'write-output "Deneme"', returnStdout: true)
+            powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStatus: true)
+            //junit 'InputOutput/Tests/TestsResults.xml'
+            step([$class: 'NUnitPublisher', testResultsPattern: 'InputOutput\\Tests\\TestsResults.xml', debug: false, keepJUnitReports: true, skipJUnitArchiver:false, failIfNoResults: true])
           }
         }
       }
