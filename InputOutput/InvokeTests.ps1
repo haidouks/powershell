@@ -27,7 +27,7 @@ write-verbose -Message "Running ScriptAnalyzer for code quality tests"
 Invoke-ScriptAnalyzer -Path $PSScriptRoot 
 $Output = Join-Path "$PSScriptRoot\Tests" TestsResults.xml
 write-verbose -Message "Running Pester for unit tests"
-$res = Invoke-Pester -Path "$PSScriptRoot\Tests" -OutputFormat NUnitXml -OutputFile $Output -PassThru 
+$res = Invoke-Pester -Path "$PSScriptRoot\Tests" -OutputFormat NUnitXml -OutputFile $Output
 if ($res.FailedCount -gt 0) { 
 	throw "$($res.FailedCount) unit tests failed."
 }
