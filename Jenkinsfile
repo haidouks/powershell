@@ -16,7 +16,8 @@ pipeline {
         stage('Code Quality Tests') {
           steps {
             powershell(encoding: 'UTF8', script: 'InputOutput/InvokeTests.ps1', returnStatus: true)
-            junit 'InputOutput/Tests/TestsResults.xml'
+            //junit 'InputOutput/Tests/TestsResults.xml'
+            step([$class: 'NUnitPublisher', testResultsPattern: 'InputOutput\\Tests\\TestsResults.xml', debug: false, keepJUnitReports: true, skipJUnitArchiver:false, failIfNoResults: true])
           }
         }
       }
