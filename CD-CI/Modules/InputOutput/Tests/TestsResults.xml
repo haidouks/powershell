@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="4" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2017-10-30" time="20:30:46">
+  <environment user="Cansın" machine-name="HASAN" cwd="C:\Git\powershell\CD-CI\Modules\InputOutput" user-domain="HASAN" platform="Microsoft Windows 8.1 Enterprise|C:\Windows|\Device\Harddisk0\Partition1" nunit-version="2.5.8.0" os-version="6.3.9600" clr-version="4.0.30319.42000" />
+  <culture-info current-culture="tr-TR" current-uiculture="tr-TR" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="0.2882" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\InputOutput.tests.ps1" executed="True" result="Success" success="True" time="0.2882" asserts="0" description="C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\InputOutput.tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-FileEncoding" executed="True" result="Success" success="True" time="0.1542" asserts="0" description="Get-FileEncoding">
+            <results>
+              <test-suite type="TestFixture" name="If file is there" executed="True" result="Success" success="True" time="0.1542" asserts="0" description="If file is there">
+                <results>
+                  <test-case description="Encoding for the file(C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\Data\UTF8.txt) Should Be UTF8" name="Get-FileEncoding.If file is there.Encoding for the file(C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\Data\UTF8.txt) Should Be UTF8" time="0.1401" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Encoding for the file(C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\Data\ASCII.txt) Should Be ASCII" name="Get-FileEncoding.If file is there.Encoding for the file(C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\Data\ASCII.txt) Should Be ASCII" time="0.014" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Search-BigFile" executed="True" result="Success" success="True" time="0.134" asserts="0" description="Search-BigFile">
+            <results>
+              <test-suite type="TestFixture" name="If file is there" executed="True" result="Success" success="True" time="0.134" asserts="0" description="If file is there">
+                <results>
+                  <test-case description="LineNumber for the folder(C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\Data) Should Be 2 and Content should be 'search*Me* search*Me* search *Me* *CnSn*'" name="Search-BigFile.If file is there.LineNumber for the folder(C:\Git\powershell\CD-CI\Modules\InputOutput\Tests\Data) Should Be 2 and Content should be 'search*Me* search*Me* search *Me* *CnSn*'" time="0.106" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Check result length and content of third item for keyword 'searchMe'. Case insensitive" name="Search-BigFile.If file is there.Check result length and content of third item for keyword 'searchMe'. Case insensitive" time="0.028" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

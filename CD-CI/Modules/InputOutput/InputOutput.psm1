@@ -22,7 +22,7 @@ function Get-FileEncoding {
 	$bytes = [byte[]](Get-Content $Path -Encoding byte -ReadCount 4 -TotalCount 4 -ErrorAction Stop -ErrorVariable Err)
 	Write-Verbose -Message "Checking encoding type for file:$Path"
 	$result = $null 
-	    if ($bytes -ne $null) {
+	    if ($null -ne $bytes) {
             if ($bytes.Count -ge 4) {
                 if ( $bytes[0] -eq 0xef -and $bytes[1] -eq 0xbb -and $bytes[2] -eq 0xbf ) {
                     $result = 'UTF8' 
@@ -69,8 +69,10 @@ function Update-ContentOfFile {
   .PARAMETER TakeBackup
   If you want to take a backup of the file before you make changes, enable this switch.
   #>
-    [CmdletBinding()]
-	Param (
+ [CmdletBinding(            
+    SupportsShouldProcess = $true            
+	)]
+ Param (
 		[Parameter(Mandatory=$True,
 			ValueFromPipeline=$True,
 			ValueFromPipelineByPropertyName=$True,
@@ -105,7 +107,7 @@ function Update-ContentOfFile {
 	$Error = $null
 	$Item  = $null
 	$Date  = $(Get-Date -Format 'yyyyMMddHHmm')
-	Write-Host "Take backup value: $TakeBackup"
+	Write-Verbose -Message "Take backup value: $TakeBackup"
 	try {
 		Write-Verbose -Message "$(Get-Date)-Getting file: $Path"
 		$Item = Get-Item -Path $Path -ErrorAction Stop -ErrorVariable Error
@@ -137,7 +139,7 @@ function Update-ContentOfFile {
 		}
 	}
 
-function Search-BigFiles {
+ function Search-BigFile {
     <#
   .SYNOPSIS
   This function searchs keyword(s) in huge files which have milions of lines in a fast way.
@@ -177,7 +179,7 @@ function Search-BigFiles {
 			[switch]$Highlight
 	)
 	$t1 = Get-Date
-	write-verbose -Message "Search will start for file:´n$Path and Keywords:´n$($Keywords|Out-String -Stream)"
+	write-verbose -Message "Search will start for file:ï¿½n$Path and Keywords:ï¿½n$($Keywords|Out-String -Stream)"
 	$file = [IO.File]::OpenText($Path)
 	$lineNumber = 0
 	$Results = New-Object Collections.ArrayList
@@ -216,7 +218,7 @@ function Search-BigFiles {
 					Path = $Path
 				}
 				[Void]$Results.Add($Result)
-				write-verbose -Message "All keywords matched, added result to List ´n$($($result[1]) | out-string -Stream)"
+				write-verbose -Message "All keywords matched, added result to List ï¿½n$($($result[1]) | out-string -Stream)"
 			}
 		}
 	$file.Dispose()
@@ -262,15 +264,15 @@ Param(
 	$Results = New-Object Collections.ArrayList
 	Write-Verbose -Message "Getting all processes named $($ProcessName | Out-String -Stream)"
 	$Procs = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
-	If($procs -ne $null)
+	If($null -ne $procs)
 	{
-		$Procs | foreach{
+		$Procs | ForEach-Object{
 			$Proc = $_
 			if($Path.Count -gt 0)
 			{
-				$Path | foreach{
+				$Path | ForEach-Object{
 				$p = $_
-				$Proc.Modules | foreach{
+				$Proc.Modules | ForEach-Object{
 					if($_.FileName -eq $p)
 					{
 						$Result = @{
@@ -278,7 +280,7 @@ Param(
 							ProcessID   = $Proc.Id
 							File = $p
 						}
-						$object = New-Object –TypeName PSObject –Prop $Result
+						$object = New-Object -TypeName PSObject -Property $Result
 						[Void]$Results.Add($object)
 					}
 				}
@@ -287,13 +289,13 @@ Param(
 			else
 			{
 				
-				$_.Modules | foreach{
+				$_.Modules | ForEach-Object{
 					$Result = @{
 							ProcessName = $Proc.Name
 							ProcessID   = $Proc.Id
 							File = $_.FileName
 						}
-					$object = New-Object -TypeName PSObject –Prop $Result
+					$object = New-Object -TypeName PSObject -Property $Result
 					[Void]$Results.Add($object)
 					}
 			}
@@ -327,26 +329,23 @@ function Remove-Handle {
   .PARAMETER Process
   Specify the name(s) of processes that you want to search for.
   #>
-    
+  [CmdletBinding(            
+    SupportsShouldProcess = $true            
+	)]    
 Param(
 		[Parameter(Mandatory=$True,
 			ValueFromPipeline=$True,
 			ValueFromPipelineByPropertyName=$True,
     		HelpMessage='Enter the path(s) of file(s)')]
 			[ValidateNotNullOrEmpty()]
-			[String[]]$Path,
-		[Parameter(Mandatory=$False,
-			ValueFromPipeline=$True,
-			ValueFromPipelineByPropertyName=$True,
-    		HelpMessage='Before killing the process confirm it')]
-			[Switch]$Confirm = $False
+			[String[]]$Path
 	)
 	foreach($p in $Path)
 	{
 		Write-Verbose -Message "Finding handles for path $p"
 		$handles = Find-Handle -Path $p
 		Write-Verbose -Message "$($handles.Count) handles found, removing handles"
-		$handles | foreach {
+		$handles | ForEach-Object {
 			$handle = $_
 			Stop-Process -Id $handle.ProcessID -Confirm:$(-not $Confirm) -Force -ErrorAction Continue
 		}
