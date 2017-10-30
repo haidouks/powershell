@@ -16,6 +16,17 @@ Describe "Get-FileEncoding" {
 		}
 	}
 }
+
+Describe "Find-Handle" {
+	Context "If the process is explorer" {
+		$handles = Find-Handle -Process "Explorer"
+		$result = $handles.Count
+		It "Should find more than 1 handle" {
+			$result | should BeGreaterThan 1
+		}
+	}
+}
+
 Describe "Search-BigFile" {
 	Context "If file is there" {
 

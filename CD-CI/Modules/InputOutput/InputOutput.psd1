@@ -12,7 +12,7 @@
 RootModule = 'InputOutput'
 
 # Version number of this module.
-ModuleVersion = '1.4.1'
+ModuleVersion = '1.4.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Bug in Handle functions fixed'
+        ReleaseNotes = 'New unit test added for Find-Handle'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
