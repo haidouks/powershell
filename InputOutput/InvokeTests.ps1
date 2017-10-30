@@ -1,4 +1,5 @@
 $verbosepreference = "SilentlyContinue"
+$InformationPreference = "SilentlyContinue"
 if ($PSVersionTable.PSVersion.Major -ge 5)
 {
     Write-Verbose "Installing PSScriptAnalyzer & Pester"
@@ -27,7 +28,7 @@ write-verbose -Message "Running ScriptAnalyzer for code quality tests"
 Invoke-ScriptAnalyzer -Path $PSScriptRoot 
 $Output = Join-Path "$PSScriptRoot\Tests" TestsResults.xml
 write-verbose -Message "Running Pester for unit tests"
-$res = Invoke-Pester -Path "$PSScriptRoot\Tests" -OutputFormat NUnitXml -OutputFile $Output
+$res = Invoke-Pester -Path "$PSScriptRoot\Tests" -OutputFormat NUnitXml -OutputFile $Output -PassThru
 if ($res.FailedCount -gt 0) { 
 	throw "$($res.FailedCount) unit tests failed."
 }
