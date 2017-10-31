@@ -6,7 +6,7 @@ Describe "Get-FileEncoding" {
 		$file = "$TestPath\Data\UTF8.txt"
 		$result = Get-FileEncoding -Path $file
 		It "Encoding for the file($file) Should Be UTF8" {
-			$result | Should be "UTF8"
+			$result | Should be "UTF18"
 		}
 
 		$file = "$TestPath\Data\ASCII.txt"
