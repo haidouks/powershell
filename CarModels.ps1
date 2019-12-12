@@ -20,7 +20,7 @@ class CarModels {
 
 function Get-CarModels {
     [CmdletBinding()]
-    param (
+    Param (
         [ValidateSet([BrandValidator],ErrorMessage="Value '{0}' is invalid. Try one of: {1}")]
         [Parameter(
             Mandatory = $true, 
@@ -29,7 +29,7 @@ function Get-CarModels {
         )]
         $Brand
     )
-    dynamicparam {
+    DynamicParam {
         # Need dynamic parameters for Template, Storage, Project Type
         # Set the dynamic parameters' name
         $ParameterName = 'Model' 
